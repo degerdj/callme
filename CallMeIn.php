@@ -1,10 +1,4 @@
 <?php
-/**
-* CallMe events listener for incoming calls
-* @author Автор: ViStep.RU
-* @version 1.0
-* @copyright: ViStep.RU (admin@vistep.ru)
-*/
 
 // проверка на запуск из браузера
 (PHP_SAPI !== 'cli' || isset($_SERVER['HTTP_USER_AGENT'])) && die('access error');

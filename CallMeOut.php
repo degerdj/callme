@@ -1,10 +1,4 @@
 <?php
-/**
-* CallMe calls handler for output calls   
-* @author Автор: ViStep.RU
-* @version 1.0
-* @copyright: ViStep.RU (admin@vistep.ru)
-*/
 
 require __DIR__ . '/vendor/autoload.php';
 

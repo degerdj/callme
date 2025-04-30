@@ -12,7 +12,7 @@ $context = $helper->getConfig('context');
 
 //данные в запросе
 $request = $_REQUEST;
-
+$helper->writeToLog($request,'POST REQ');
 //проверяем не пустой ли request
 if(!empty($request)){
     //логируем запрос
@@ -25,7 +25,9 @@ if(!empty($request)){
                     $helper->writeToLog($resultFromB24,'sendcall2b24 error in params');
                     exit('error in params');
                 }
-                $resultFromB24 = $helper->uploadRecordedFile($request['call_id'],$request['FullFname'],$request['CallIntNum'],$request['CallDuration'],$request['CallDisposition']); 
+                $regBitrix = $helper->runInputCall($request['CallIntNum'],$request['ExtNum'],1);
+                $helper->writeToLog($regBitrix,'Register call Bitrix24');
+                $resultFromB24 = $helper->uploadRecordedFile($regBitrix,$request['FullFname'],$request['CallIntNum'],$request['CallDuration'],$request['CallDisposition']); 
                 //логируем, что нам рассказал битрикс в ответ на наш реквест
                 $helper->writeToLog($resultFromB24,'sendcall2b24 upload call status');
             break;
@@ -36,7 +38,8 @@ if(!empty($request)){
     } else {
         //проверяем авторизацию по токену
         if ($request['auth']['application_token'] === $authToken) {
-            $intNum = $helper->getIntNumByUSER_ID($request['data']['USER_ID']);
+
+            $intNum = $request['data']['extension'] ?: $helper->getIntNumByUSER_ID($request['data']['USER_ID']);
             $helper->writeToLog($intNum,'intnum');
             $CalledNumber = $request['data']['PHONE_NUMBER_INTERNATIONAL'];
             $helper->writeToLog($CalledNumber,'CalledNumber');

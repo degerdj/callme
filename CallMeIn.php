@@ -35,6 +35,8 @@ $globalsObj->extentions = $helper->getConfig('extentions');
 $pamiClient = $callami->NewPAMIClient();
 $pamiClient->open();
 
+//                $helper->writeToLog([],'START THIS');
+
 //обрабатываем NewchannelEvent события
 $pamiClient->registerEventListener(
             function (EventMessage $event) use ($helper,$callami,$globalsObj){
@@ -73,6 +75,7 @@ $pamiClient->registerEventListener(
 
             },function (EventMessage $event) use ($globalsObj){
                     //для фильтра берем только указанные внешние номера
+		//if ($event instanceof NewchannelEvent)                    print_r ($event);
                     return
                         $event instanceof NewchannelEvent
                         //проверяем на вхождение в массив
@@ -92,7 +95,8 @@ $pamiClient->registerEventListener(
                 //логируем параметры звонка
                 $helper->writeToLog(array('FullFnameUrls'=>$globalsObj->FullFnameUrls,
                                     'Durations'=>$globalsObj->Durations,
-                                    'Dispositions'=>$globalsObj->Dispositions),
+                                    'Dispositions'=>$globalsObj->Dispositions,
+                  ),
                                     'New VarSetEvent - get FullFname,CallMeDURATION,CallMeDISPOSITION');
             },function (EventMessage $event) use ($globalsObj) {
                     return

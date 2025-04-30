@@ -1,4 +1,10 @@
 <?php
+/**
+* Class for working with PAMI  
+* @author Автор: ViStep.RU
+* @version 1.0
+* @copyright: ViStep.RU (admin@vistep.ru)
+**/
 
 use PAMI\Client\Impl\ClientImpl as PamiClient;
 /*

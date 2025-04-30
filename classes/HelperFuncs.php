@@ -1,4 +1,10 @@
 <?php
+/**
+* Helpers class for working with API  
+* @author Автор: ViStep.RU
+* @version 1.0
+* @copyright: ViStep.RU (admin@vistep.ru)
+**/
 
 class HelperFuncs {
 
@@ -11,6 +17,7 @@ class HelperFuncs {
 	 */
 	public function getIntNumByUSER_ID($userid){ 
 	    $result = $this->getBitrixApi(array("ID" => $userid), 'user.get');
+	    
 	    if ($result){
 	        return $result['result'][0]['UF_PHONE_INNER'];
 	    } else {
@@ -62,15 +69,17 @@ class HelperFuncs {
 				else $sipcode = 603; // отклонено, когда все остальное
 		 		break;
 		}
-
-	    $result = $this->getBitrixApi(array(
+		$ar=array(
 			    	'USER_PHONE_INNER' => $intNum,
 					'CALL_ID' => $call_id, //идентификатор звонка из результатов вызова метода telephony.externalCall.register
 					'STATUS_CODE' => $sipcode, 
 					//'CALL_START_DATE' => date("Y-m-d H:i:s"),
 					'DURATION' => $duration, //длительность звонка в секундах
 					'RECORD_URL' => $recordedfile //url на запись звонка для сохранения в Битрикс24
-					), 'telephony.externalcall.finish');
+					);
+	    $result = $this->getBitrixApi($ar, 'telephony.externalcall.finish');
+	    $this->writeToLog($ar, 'BITRIX upload');
+	    $this->writeToLog($aresult, 'BITRIX upload result');
 	    if ($result){
 	        return $result;
 	    } else {
@@ -98,17 +107,17 @@ class HelperFuncs {
 	 *	)
 	 * We need only CALL_ID
 	 */
-	public function runInputCall($exten,$callerid){ 
+	public function runInputCall($exten,$callerid,$type=2){ 
 	    $result = $this->getBitrixApi(array(
 			'USER_PHONE_INNER' => $exten,
 			//'USER_ID' => $argv[1],	
 			'PHONE_NUMBER' => $callerid,
-			'TYPE' => 2,
+			'TYPE' => $type,
 			'CALL_START_DATE' => date("Y-m-d H:i:s"),
 			'CRM_CREATE' => 1,
 			'SHOW' => 0,
 			), 'telephony.externalcall.register');
-	    $this->writeToLog($result, 'runInputCall result');
+	    $this->writeToLog($result, 'BITRIX runInputCall result');
 	    if ($result){
 	        return $result['result']['CALL_ID'];
 	    } else {
@@ -357,7 +366,11 @@ class HelperFuncs {
 		    $log .= (strlen($title) > 0 ? $title : 'DEBUG') . "\n";
 		    $log .= print_r($data, 1);
 		    $log .= "\n------------------------\n";
+		    if (!file_exists(getcwd() . '/logs')) {
+		        mkdir(getcwd() . '/logs', 0777, true);
+		        }
 		    file_put_contents(getcwd() . '/logs/CallMe.log', $log, FILE_APPEND);
+		    //print $log;
 		    return true;
 	    }
 	    else return;

@@ -1,4 +1,10 @@
 <?php
+/**
+* Globals class for working with 'globals' variables 
+* @author Автор: ViStep.RU
+* @version 1.0
+* @copyright: ViStep.RU (admin@vistep.ru)
+*/
 
 class Globals {
 

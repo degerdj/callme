@@ -1,10 +1,4 @@
 <?php
-/**
-* Helpers class for working with API  
-* @author Автор: ViStep.RU
-* @version 1.0
-* @copyright: ViStep.RU (admin@vistep.ru)
-**/
 
 class HelperFuncs {
 
